@@ -55,7 +55,3 @@ npm run prod
 ### License
 
 MIT © [Melanie Mende](https://www.linkedin.com/in/melanie-mende/).
-
-### Sources
-## 2D Pixel Art - Isometric Blocks - Free Sprites
-https://devilsworkshop.itch.io/big-pixel-isometric-block-pack-free-2d-sprites
