@@ -14,7 +14,7 @@ An HTML5 game build with Electron, Phaser.io and Webpack.
 #### Clone this repo
 
 ```
-git clone https://github.com/laniley/safe-haven.git
+git clone https://github.com/Little-Games-Studio/little-rocket.git
 ```
 
 #### Install dependencies
