@@ -1,4 +1,6 @@
 import Phaser from 'phaser'
+import clouds from './assets/images/clouds.png'
+import rocket from './assets/images/rocket.png'
 
 var config = {
     type: Phaser.AUTO,
@@ -14,17 +16,19 @@ var config = {
 var game = new Phaser.Game(config);
 
 function preload() {
-    /* this.load.setBaseURL('http://labs.phaser.io');
 
-    this.load.image('sky', 'assets/skies/space3.png');
-    this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-    this.load.image('red', 'assets/particles/red.png'); */
+    this.load.image('clouds', clouds);
+    this.load.spritesheet('rocket', rocket, { frameWidth: 50, frameHeight: 140 });
+
 }
 
 function create() {
 
-/*     this.add.image(400, 300, 'sky');
+    this.add.image(10, 10, 'clouds').setOrigin(0, 0).setScale(0.95);
 
+    this.add.sprite(this.cameras.main.centerX, this.cameras.main.height - 100, 'rocket', 1);
+    //this.add.image(this.cameras.main.centerX, this.cameras.main.height - 100, 'rocket');
+/*
     var particles = this.add.particles('red');
 
     var emitter = particles.createEmitter({
