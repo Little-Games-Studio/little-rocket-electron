@@ -1,8 +1,13 @@
-import Phaser from 'phaser'
+import * as Phaser from 'phaser';
 
 export class Rocket extends Phaser.Physics.Arcade.Sprite {
+
+    private keyW: Phaser.Input.Keyboard.Key;
+    private keyA: Phaser.Input.Keyboard.Key;
+    private keyS: Phaser.Input.Keyboard.Key;
+    private keyD: Phaser.Input.Keyboard.Key;
   
-    constructor(scene, x, y, frame) {
+    constructor(scene: Phaser.Scene, x: number, y: number) {
 
         super(scene, x, y, 'rocket', 1);
 
@@ -18,15 +23,14 @@ export class Rocket extends Phaser.Physics.Arcade.Sprite {
         this.keyD = this.scene.input.keyboard.addKey('D');
     
         // PHYSICS
-        this.getBody().setSize(30, 30);
-        this.getBody().setOffset(8, 0);
+        this.getBody().setSize(50, 140);
     }
 
-    getBody() {
-        return this.body;
+    protected getBody(): Phaser.Physics.Arcade.Body {
+        return this.body as Phaser.Physics.Arcade.Body;
     }
   
-    update() {
+    update(): void {
 
       this.getBody().setVelocity(0);
   
@@ -36,8 +40,6 @@ export class Rocket extends Phaser.Physics.Arcade.Sprite {
   
       if (this.keyA?.isDown) {
         this.body.velocity.x = -110;
-        this.checkFlip();
-        this.getBody().setOffset(48, 15);
       }
   
       if (this.keyS?.isDown) {
@@ -46,8 +48,6 @@ export class Rocket extends Phaser.Physics.Arcade.Sprite {
   
       if (this.keyD?.isDown) {
         this.body.velocity.x = 110;
-        this.checkFlip();
-        this.getBody().setOffset(15, 15);
       }
     }
   }

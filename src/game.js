@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import clouds from './assets/images/clouds.png'
 import rocket_png from './assets/images/rocket.png'
-import { Rocket } from './classes/rocket'
+import { Rocket } from './classes/rocket.ts'
 
 var config = {
     type: Phaser.AUTO,
@@ -12,7 +12,13 @@ var config = {
         preload: preload,
         create: create,
         update: update
-    }
+    },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: true,
+        },
+    },
 };
 
 var game = new Phaser.Game(config);
@@ -28,7 +34,6 @@ function create() {
 
     this.add.image(10, 10, 'clouds').setOrigin(0, 0).setScale(0.95);
     this.rocket = new Rocket(this, this.cameras.main.centerX, this.cameras.main.height - 100);
-    //this.add.sprite(this.cameras.main.centerX, this.cameras.main.height - 100, 'rocket', 1);
 
 }
 
