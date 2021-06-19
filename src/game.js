@@ -2,6 +2,8 @@ import Phaser from 'phaser'
 import clouds_big from './assets/images/background/clouds_big.png'
 import clouds_small from './assets/images/background/clouds_small.png'
 import rocket_png from './assets/images/rocket.png'
+import music from './assets/audio/racing.mp3'
+
 import { Rocket } from './classes/rocket.ts'
 
 var config = {
@@ -17,7 +19,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            debug: false,
         },
     },
 };
@@ -30,6 +32,8 @@ function preload() {
     this.load.image('clouds_small', clouds_small);
     this.load.spritesheet('rocket', rocket_png, { frameWidth: 50, frameHeight: 140 });
 
+    this.load.audio('music', [music]);
+
 }
 
 function create() {
@@ -41,6 +45,11 @@ function create() {
     this.clouds_big.alpha = 0.6;
     
     this.rocket = new Rocket(this, this.cameras.main.centerX, this.cameras.main.height - 100);
+
+    this.music = this.sound.add('music');
+    this.music.loop = true;
+
+    this.music.play();
 
 }
 

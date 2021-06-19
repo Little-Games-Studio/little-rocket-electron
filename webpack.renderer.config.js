@@ -26,6 +26,10 @@ module.exports = {
                       transpileOnly: true
                   }
               }]
+          },
+          {
+              test: /\.mp3$/,
+              loader: 'file-loader'
           }
         ],
   },
