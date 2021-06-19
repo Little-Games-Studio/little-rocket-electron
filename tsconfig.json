@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "./.webpack/main",
+        "sourceMap": true
+    },
+    "include": [
+        "src/classes"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

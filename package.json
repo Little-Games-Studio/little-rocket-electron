@@ -73,7 +73,8 @@
     "css-loader": "^5.0.0",
     "electron": "13.1.2",
     "node-loader": "^2.0.0",
-    "style-loader": "^2.0.0"
+    "style-loader": "^2.0.0",
+    "ts-loader": "^9.2.3"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
