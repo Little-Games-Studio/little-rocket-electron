@@ -3,12 +3,16 @@
         "target": "es6",
         "module": "commonjs",
         "outDir": "./.webpack/main",
-        "sourceMap": true
+        "sourceMap": true,
     },
     "include": [
-        "src/classes"
+        "src/classes",
+        "src/scenes"
     ],
     "exclude": [
         "node_modules"
+    ],
+    "files": [
+        "./index.d.ts"
     ]
 }
