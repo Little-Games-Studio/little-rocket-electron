@@ -14,10 +14,12 @@ export class Rocket extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, 'rocket', 1);
 
         scene.add.existing(this);
+        
+        // PHYSICS
         scene.physics.add.existing(this);
-
         this.getBody().setCollideWorldBounds(true);
-  
+        this.getBody().setSize(50, 140);
+
         // KEYS
         this.keyW = this.scene.input.keyboard.addKey('W');
         this.keyA = this.scene.input.keyboard.addKey('A');
@@ -25,9 +27,6 @@ export class Rocket extends Phaser.Physics.Arcade.Sprite {
         this.keyD = this.scene.input.keyboard.addKey('D');
 
         this.cursors = this.scene.input.keyboard.createCursorKeys();
-    
-        // PHYSICS
-        this.getBody().setSize(50, 140);
     }
 
     protected getBody(): Phaser.Physics.Arcade.Body {

@@ -6,7 +6,7 @@
         "sourceMap": true,
     },
     "include": [
-        "src/classes",
+        "src/gameObjects",
         "src/scenes"
     ],
     "exclude": [
