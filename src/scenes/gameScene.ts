@@ -28,11 +28,10 @@ export class GameScene extends Phaser.Scene {
     private speed_percentage: integer;
 
     private spawn_timer: integer;
+    private spawn: boolean;
 
     constructor() {
         super(sceneConfig);
-
-        this.spawn_timer = 0;
     }
 
     preload(): void {
@@ -76,6 +75,9 @@ export class GameScene extends Phaser.Scene {
         this.stars = this.physics.add.group();
 
         this.physics.add.overlap(this.rocket, this.stars, this.collectStar, null, this);
+
+        this.spawn_timer = 0;
+        this.spawn = true;
     }
 
     update(): void {
@@ -85,8 +87,8 @@ export class GameScene extends Phaser.Scene {
 
         this.rocket.update();
 
-        if (this.spawn_timer > 200) {
-            this.stars.create(Phaser.Math.Between(0, 550), 0, 'star', 11).setOrigin(0, 0);
+        if (this.spawn && this.spawn_timer > 200) {
+            this.stars.create(Phaser.Math.Between(0, 550), -50, 'star', 0).setOrigin(0, 0);
             this.spawn_timer -= 200;
         }
 
@@ -96,11 +98,22 @@ export class GameScene extends Phaser.Scene {
         this.stars.children.iterate((child: any) => {
             child.y += 1;
         });
+
+        this.stars.children.iterate((child: any) => {
+            if (child.y > 800) {
+                this.spawn = false; // we now have enough stars and will start to reuse the existing ones
+                child.x = Phaser.Math.Between(0, 550);
+                child.y = -100;
+            }
+        });
+ 
+        console.log(this.stars.children.size)
     }
 
     collectStar(rocket, star): void {
         this.events.emit('collectStar');
-        star.destroy();
+        star.x = Phaser.Math.Between(0, 550);
+        star.y = -100;
     }
 
 }
