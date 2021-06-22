@@ -76,7 +76,6 @@ export class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.rocket, this.stars, this.collectStar, null, this);
 
         this.spawn_timer = 0;
-        this.spawn = true;
     }
 
     update(): void {
@@ -108,7 +107,7 @@ export class GameScene extends Phaser.Scene {
         console.log(this.stars.children.size)
     }
 
-    collectStar(rocket, star: Phaser.GameObjects.Sprite): void {
+    collectStar(rocket, star): void {
         this.events.emit('collectStar');
         star.destroy();
     }
