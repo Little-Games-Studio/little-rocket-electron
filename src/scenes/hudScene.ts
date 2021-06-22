@@ -38,6 +38,10 @@ export class HUDScene extends Phaser.Scene {
 
         }, this);
     }
+
+    update(): void {
+        this.score += 1;
+    }
 }
 
 /* <div class="hud-list-group infos" >

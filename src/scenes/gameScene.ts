@@ -28,7 +28,6 @@ export class GameScene extends Phaser.Scene {
     private speed_percentage: integer;
 
     private spawn_timer: integer;
-    private spawn: boolean;
 
     constructor() {
         super(sceneConfig);
@@ -87,7 +86,7 @@ export class GameScene extends Phaser.Scene {
 
         this.rocket.update();
 
-        if (this.spawn && this.spawn_timer > 200) {
+        if (this.spawn_timer > 200) {
             this.stars.create(Phaser.Math.Between(0, 550), -50, 'star', 0).setOrigin(0, 0);
             this.spawn_timer -= 200;
         }
@@ -99,21 +98,19 @@ export class GameScene extends Phaser.Scene {
             child.y += 1;
         });
 
-        this.stars.children.iterate((child: any) => {
+        this.stars.children.each((child: Phaser.GameObjects.Sprite) => {
             if (child.y > 800) {
-                this.spawn = false; // we now have enough stars and will start to reuse the existing ones
-                child.x = Phaser.Math.Between(0, 550);
-                child.y = -100;
+                this.stars.children.delete(child);
+                child.destroy();
             }
         });
  
         console.log(this.stars.children.size)
     }
 
-    collectStar(rocket, star): void {
+    collectStar(rocket, star: Phaser.GameObjects.Sprite): void {
         this.events.emit('collectStar');
-        star.x = Phaser.Math.Between(0, 550);
-        star.y = -100;
+        star.destroy();
     }
 
 }
