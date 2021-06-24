@@ -4,6 +4,7 @@ import * as clouds_big from './../assets/images/background/clouds_big.png'
 import * as clouds_small from './../assets/images/background/clouds_small.png'
 import * as rocket_png from './../assets/images/rocket.png'
 import * as star_png from './../assets/images/star.png'
+import * as asteroid_png from './../assets/images/asteroid.png'
 import racing_mp3 from './../assets/audio/racing.mp3'
 
 import { Rocket } from '../gameObjects/rocket'
@@ -20,6 +21,7 @@ export class GameScene extends Phaser.Scene {
     private clouds_big: Phaser.GameObjects.TileSprite;
     private rocket: Rocket;
     private stars: Phaser.Physics.Arcade.Group;
+    private asteroids: Phaser.Physics.Arcade.Group;
     private music: any;
 
     public score: integer;
@@ -37,6 +39,7 @@ export class GameScene extends Phaser.Scene {
         this.load.image('clouds_big', clouds_big);
         this.load.image('clouds_small', clouds_small);
         this.load.image('star', star_png);
+        this.load.image('asteroid', asteroid_png);
         this.load.spritesheet('rocket', rocket_png, { frameWidth: 50, frameHeight: 140 });
         this.load.audio('music', [racing_mp3]);
     }
@@ -57,9 +60,7 @@ export class GameScene extends Phaser.Scene {
         this.music.play();
 
         this.input.keyboard.on('keydown-SPACE', () => {
-            this.music.pause();
-            this.scene.pause('GameScene');
-            this.scene.launch('PauseScene');
+            this.pause();
         }, this);
 
         this.events.on('pause', () => {
@@ -72,8 +73,10 @@ export class GameScene extends Phaser.Scene {
         })
 
         this.stars = this.physics.add.group();
+        this.asteroids = this.physics.add.group();
 
         this.physics.add.overlap(this.rocket, this.stars, this.collectStar, null, this);
+        this.physics.add.overlap(this.rocket, this.asteroids, this.hitAsteroid, null, this);
 
         this.spawn_timer = 0;
     }
@@ -87,6 +90,7 @@ export class GameScene extends Phaser.Scene {
 
         if (this.spawn_timer > 200) {
             this.stars.create(Phaser.Math.Between(0, 550), -50, 'star', 0).setOrigin(0, 0);
+            this.asteroids.create(Phaser.Math.Between(0, 550), -50, 'asteroid', 0).setOrigin(0, 0);
             this.spawn_timer -= 200;
         }
 
@@ -104,12 +108,32 @@ export class GameScene extends Phaser.Scene {
             }
         });
  
-        console.log(this.stars.children.size)
+        this.asteroids.children.iterate((child: any) => {
+            child.y += 1;
+        });
+
+        this.asteroids.children.each((child: Phaser.GameObjects.Sprite) => {
+            if (child.y > 800) {
+                this.asteroids.children.delete(child);
+                child.destroy();
+            }
+        });
+    }
+
+    pause() {
+        this.music.pause();
+        this.scene.pause('GameScene');
+        this.scene.launch('PauseScene');
     }
 
     collectStar(rocket, star): void {
         this.events.emit('collectStar');
         star.destroy();
+    }
+
+    hitAsteroid(rocket, asteroid): void {
+        this.events.emit('hitAsteroid');
+        this.pause();
     }
 
 }
