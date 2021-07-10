@@ -3,6 +3,7 @@ import Phaser from 'phaser'
 import { GameScene } from './scenes/gameScene'
 import { PauseScene } from './scenes/pauseScene'
 import { HUDScene } from './scenes/hudScene'
+import { GameOverScene } from './scenes/gameOverScene'
 
 var config = {
     type: Phaser.AUTO,
@@ -13,7 +14,7 @@ var config = {
     audio: {
         disableWebAudio: true
     },
-    scene: [GameScene, PauseScene, HUDScene ],
+    scene: [GameScene, PauseScene, HUDScene, GameOverScene ],
     physics: {
         default: 'arcade',
         arcade: {

@@ -8,8 +8,6 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 
 export class PauseScene extends Phaser.Scene {
 
-    private spaceKey: Phaser.Input.Keyboard.Key;
-
     constructor() {
         super(sceneConfig);
     }
@@ -18,9 +16,7 @@ export class PauseScene extends Phaser.Scene {
         console.log('Pause Scene launched.');
 
         this.input.keyboard.once('keydown-SPACE', () => {
-
             this.scene.resume('GameScene');
-
         }, this);
     }
 }
