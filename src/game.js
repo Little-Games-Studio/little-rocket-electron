@@ -16,7 +16,7 @@ var config = {
     },
     scene: [GameScene, PauseScene, HUDScene, GameOverScene ],
     physics: {
-        default: 'arcade',
+        default: 'matter',
         arcade: {
             debug: true,
         },
