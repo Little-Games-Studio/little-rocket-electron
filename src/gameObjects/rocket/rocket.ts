@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
 
-export class Rocket extends Phaser.Physics.Arcade.Sprite {
+export class Rocket extends Phaser.Physics.Matter.Sprite {
 
     private keyW: Phaser.Input.Keyboard.Key;
     private keyA: Phaser.Input.Keyboard.Key;
@@ -8,18 +8,15 @@ export class Rocket extends Phaser.Physics.Arcade.Sprite {
     private keyD: Phaser.Input.Keyboard.Key;
 
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
-  
+
     constructor(scene: Phaser.Scene, x: number, y: number) {
 
-        super(scene, x, y, 'rocket', 1);
+        super(scene.matter.world, x, y, 'rocket', 1, { label: 'rocket', isSensor: true});
 
         scene.add.existing(this);
-        
-        // PHYSICS
-        scene.physics.add.existing(this);
 
-        this.getBody().setCollideWorldBounds(true);
-        this.getBody().setSize(50, 70);
+        //this.body..setCollideWorldBounds(true);
+        //this.getBody().setSize(50, 70);
 
         // KEYS
         this.keyW = this.scene.input.keyboard.addKey('W');
@@ -30,28 +27,26 @@ export class Rocket extends Phaser.Physics.Arcade.Sprite {
         this.cursors = this.scene.input.keyboard.createCursorKeys();
     }
 
-    protected getBody(): Phaser.Physics.Arcade.Body {
-        return this.body as Phaser.Physics.Arcade.Body;
-    }
-  
     update(): void {
 
-        this.getBody().setVelocity(0);
-    
+        this.setVelocity(0, 0);
+
         if (this.keyW?.isDown || this.cursors.up.isDown) {
-            this.body.velocity.y = -110;
+            if (this.x < this.scene.cameras.main.height) {
+                this.setVelocityY(-1);
+            }  
         }
-  
+
         if (this.keyA?.isDown || this.cursors.left.isDown) {
-            this.body.velocity.x = -110;
+            this.setVelocityX(-1);
         }
-    
+
         if (this.keyS?.isDown || this.cursors.down.isDown) {
-            this.body.velocity.y = 110;
+            this.setVelocityY(1);
         }
-    
+
         if (this.keyD?.isDown || this.cursors.right.isDown) {
-            this.body.velocity.x = 110;
+            this.setVelocityX(1);
         }
     }
 }
