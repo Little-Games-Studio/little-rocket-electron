@@ -1,5 +1,22 @@
 import * as Phaser from 'phaser';
 
+const shape: Phaser.Types.Math.Vector2Like[] = [
+    { x: 25, y: 0 }, // spitze
+    { x: 37, y: 20 }, // rechts oben
+    { x: 50, y: 50 }, // rechts mitte
+    { x: 45, y: 75 },
+    { x: 35, y: 87 },
+    { x: 45, y: 95 },
+    { x: 50, y: 103 }, // unten rechts
+    { x: 25, y: 110 }, // unten mitte
+    { x: 0, y: 103 }, // unten links
+    { x: 5, y: 95 },
+    { x: 15, y: 87 },
+    { x: 5, y: 75 },
+    { x: 0, y: 50 },
+    { x: 15, y: 20 } // links oben
+];
+
 export class Rocket extends Phaser.Physics.Matter.Sprite {
 
     private keyW: Phaser.Input.Keyboard.Key;
@@ -11,12 +28,9 @@ export class Rocket extends Phaser.Physics.Matter.Sprite {
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
 
-        super(scene.matter.world, x, y, 'rocket', 1, { label: 'rocket', isSensor: true});
+        super(scene.matter.world, x, y, 'rocket', 1, { label: 'rocket', isSensor: true, vertices: shape });
 
         scene.add.existing(this);
-
-        //this.body..setCollideWorldBounds(true);
-        //this.getBody().setSize(50, 70);
 
         // KEYS
         this.keyW = this.scene.input.keyboard.addKey('W');
@@ -32,7 +46,7 @@ export class Rocket extends Phaser.Physics.Matter.Sprite {
         this.setVelocity(0, 0);
 
         if (this.keyW?.isDown || this.cursors.up.isDown) {
-            if (this.x < this.scene.cameras.main.height) {
+            if (this.y > this.height / 2) {
                 this.setVelocityY(-1);
             }  
         }
@@ -42,7 +56,9 @@ export class Rocket extends Phaser.Physics.Matter.Sprite {
         }
 
         if (this.keyS?.isDown || this.cursors.down.isDown) {
-            this.setVelocityY(1);
+            if (this.y < this.scene.cameras.main.height - this.height / 2) {
+                this.setVelocityY(1);
+            }
         }
 
         if (this.keyD?.isDown || this.cursors.right.isDown) {

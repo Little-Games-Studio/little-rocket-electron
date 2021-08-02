@@ -11,6 +11,7 @@ import { Rocket } from '../gameObjects/rocket/rocket'
 
 import * as star_png from './../assets/images/star.png'
 import { Star } from '../gameObjects/star/star'
+import { Asteroid } from '../gameObjects/asteroid/asteroid';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
@@ -32,8 +33,7 @@ export class GameScene extends Phaser.Scene {
     private clouds_small: Phaser.GameObjects.TileSprite;
     private clouds_big: Phaser.GameObjects.TileSprite;
     private rocket: Rocket;
-    
-    private asteroids: Phaser.Physics.Arcade.Group;
+
     private music: any;
 
     public speed: integer = 1;
@@ -46,8 +46,7 @@ export class GameScene extends Phaser.Scene {
     private spawn_timer: integer;
 
     private stars: Array<any>;
-    private star_shape: Phaser.Types.Math.Vector2Like[];
-    private collision_category_stars: any;
+    private asteroids: Array<any>;
 
     constructor() {
         super(sceneConfig);
@@ -72,14 +71,11 @@ export class GameScene extends Phaser.Scene {
         this.clouds_small.alpha = 0.3;
         this.clouds_big.alpha = 0.6;
 
-        //this.matter.world.setBounds(0, 0, this.cameras.main.width, this.cameras.main.height);
-
         this.matter.world.on('collisionstart', event => {
             for (var i = 0; i < event.pairs.length; i++) {
-                console.log('collision', event.pairs[i])
+
                 var bodyA = this.getRootBody(event.pairs[i].bodyA);
                 var bodyB = this.getRootBody(event.pairs[i].bodyB);
-                console.log(bodyA, bodyB)
 
                 if ((bodyA.label === 'rocket' && bodyB.label === 'star')) {
                     this.collectStar(bodyB.gameObject);
@@ -87,6 +83,14 @@ export class GameScene extends Phaser.Scene {
 
                 if ((bodyB.label === 'rocket' && bodyA.label === 'star')) {
                     this.collectStar(bodyA.gameObject);
+                }
+
+                if ((bodyA.label === 'rocket' && bodyB.label === 'asteroid')) {
+                    this.hitAsteroid();
+                }
+
+                if ((bodyB.label === 'rocket' && bodyA.label === 'asteroid')) {
+                    this.hitAsteroid();
                 }
             }
         });
@@ -112,10 +116,7 @@ export class GameScene extends Phaser.Scene {
         })
 
         this.stars = [];
-        this.collision_category_stars = this.matter.world.nextCategory();
-
-        this.asteroids = this.physics.add.group();
-        this.physics.add.overlap(this.rocket, this.asteroids, this.hitAsteroid, null, this);
+        this.asteroids = [];
 
         this.score = 0;
         this.speed_timer = 0;
@@ -141,13 +142,11 @@ export class GameScene extends Phaser.Scene {
 
         if (this.spawn_timer > 1000) {
 
-            var star_image = new Star(this);
+            var star = new Star(this);
+            this.stars.push(star);
 
-            star_image.setCollisionCategory(this.collision_category_stars);
-            this.stars.push(star_image);
-
-            var new_asteroid = this.physics.add.image(Phaser.Math.Between(0, 550), -50, 'asteroid', 0).setOrigin(0, 0).setCircle(35);
-            this.asteroids.add(new_asteroid);
+            var asteroid = new Asteroid(this);
+            this.asteroids.push(asteroid);
 
             this.spawn_timer -= 1000;
         }
@@ -162,13 +161,14 @@ export class GameScene extends Phaser.Scene {
             }
         });
  
-        this.asteroids.children.iterate((child: any) => {
+        this.asteroids.forEach((child: any) => {
             child.y += 1 * this.speed;
         });
 
-        this.asteroids.children.each((child: Phaser.GameObjects.Sprite) => {
-            if (child.y > 800) {
-                this.asteroids.children.delete(child);
+        this.asteroids.forEach((child: Phaser.GameObjects.Sprite) => {
+            if (child.y > 900) {
+                this.asteroids.splice(this.asteroids.indexOf(child), 1);
+                this.matter.world.remove(child);
                 child.destroy();
             }
         });
@@ -185,7 +185,7 @@ export class GameScene extends Phaser.Scene {
         this.destroyStar(star);
     }
 
-    hitAsteroid(rocket, asteroid): void {
+    hitAsteroid(): void {
         this.events.emit('hitAsteroid');
         this.music.pause();
         this.scene.pause('GameScene');
@@ -193,11 +193,9 @@ export class GameScene extends Phaser.Scene {
     }
 
     destroyStar(star) {
-        console.log(star)
         this.stars.splice(this.stars.indexOf(star), 1);
         this.matter.world.remove(star);
         star.destroy();
-        console.log(this.stars.length)
     }
 
     getRootBody(body) {

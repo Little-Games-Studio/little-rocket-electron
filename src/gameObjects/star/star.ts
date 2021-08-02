@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
 
-const star_shape: Phaser.Types.Math.Vector2Like[] = [
+const shape: Phaser.Types.Math.Vector2Like[] = [
     { x: 30, y: 0 },
     { x: 40, y: 20 },
     { x: 60, y: 22 },
@@ -17,7 +17,7 @@ export class Star extends Phaser.Physics.Matter.Sprite {
 
     constructor(scene: Phaser.Scene) {
 
-        super(scene.matter.world, Phaser.Math.Between(0, 550), -50, 'star', 0, { label: 'star', isSensor: true, vertices: star_shape });
+        super(scene.matter.world, Phaser.Math.Between(0, 550), -50, 'star', 0, { label: 'star', isSensor: true, vertices: shape });
  
         scene.add.existing(this);
     }
