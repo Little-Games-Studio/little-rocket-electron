@@ -36,11 +36,10 @@ export class GameScene extends Phaser.Scene {
 
     private music: any;
 
-    public speed: integer = 1;
+    public speed: integer = 0.1;
     public score: integer = 0;
     private distance_to_goal: integer;
-    private collected_stars: integer;
-    private speed_percentage: integer;
+    public collected_stars: integer = 0;
 
     private speed_timer: integer;
     private spawn_timer: integer;
@@ -119,6 +118,8 @@ export class GameScene extends Phaser.Scene {
         this.asteroids = [];
 
         this.score = 0;
+        this.collected_stars = 0;
+        this.speed = 0.1;
         this.speed_timer = 0;
         this.spawn_timer = 0;
     }
@@ -127,18 +128,18 @@ export class GameScene extends Phaser.Scene {
 
         this.speed_timer += delta;
 
-        if (this.speed_timer > 1000 /*ms*/) {
+        if (this.speed_timer > 5000 /*ms*/) {
             this.score += 1;
             this.speed += 0.01;
-            this.speed_timer -= 1000;
+            this.speed_timer -= 5000;
         }
 
-        this.clouds_small.tilePositionY -= 0.05 * delta * this.speed;
-        this.clouds_big.tilePositionY -= 0.1 * delta * this.speed;
+        this.clouds_small.tilePositionY -= 0.85 * delta * this.speed;
+        this.clouds_big.tilePositionY -= delta * this.speed;
 
         this.rocket.update();
 
-        this.spawn_timer += delta;
+        this.spawn_timer += delta * this.speed * 5;
 
         if (this.spawn_timer > 1000) {
 
@@ -152,7 +153,7 @@ export class GameScene extends Phaser.Scene {
         }
 
         this.stars.forEach((child: any) => {
-            child.y += 1 * this.speed;
+            child.y += delta * this.speed * 1.2;
         });
 
         this.stars.forEach((star: Phaser.GameObjects.Sprite) => {
@@ -162,7 +163,7 @@ export class GameScene extends Phaser.Scene {
         });
  
         this.asteroids.forEach((child: any) => {
-            child.y += 1 * this.speed;
+            child.y += delta * this.speed;
         });
 
         this.asteroids.forEach((child: Phaser.GameObjects.Sprite) => {
@@ -181,6 +182,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     collectStar(star): void {
+        this.collected_stars += 1;
         this.score += 10;
         this.destroyStar(star);
     }

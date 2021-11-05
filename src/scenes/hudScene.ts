@@ -9,10 +9,9 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 
 export class HUDScene extends Phaser.Scene {
 
-    private scoreText: any;
-    private distance_to_goal: integer;
-    private collected_stars: integer;
-    private speed_percentage: integer;
+    private score_text: any;
+    private collected_stars_text: any;
+    private speed_text: any;
     private myGame: GameScene;
     //rocket.cannon.currentValue
     //rocket.shield.currentValue
@@ -24,7 +23,9 @@ export class HUDScene extends Phaser.Scene {
 
     create() {
         //  Our Text object to display the Score
-        this.scoreText = this.add.text(10, 10, 'Score: 0', { font: '28px Arial' });
+        this.score_text = this.add.text(10, 10, 'Score: 0', { font: '28px Arial' });
+        this.collected_stars_text = this.add.text(10, 50, 'Stars: 0', { font: '28px Arial' });
+        this.speed_text = this.add.text(10, 90, 'Speed: 0 km/h', { font: '28px Arial' });
 
         //  Grab a reference to the Game Scene
         this.myGame = this.scene.get('GameScene') as GameScene;
@@ -32,6 +33,8 @@ export class HUDScene extends Phaser.Scene {
     }
 
     update(): void {
-        this.scoreText.setText('Score: ' + this.myGame.score);
+        this.score_text.setText('Score: ' + this.myGame.score);
+        this.collected_stars_text.setText('Stars: ' + this.myGame.collected_stars);
+        this.speed_text.setText('Speed: ' + Math.floor(this.myGame.speed * 1000) + ' km/h');
     }
 }
