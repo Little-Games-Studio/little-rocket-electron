@@ -17,7 +17,10 @@ export class GameOverScene extends Phaser.Scene {
     create(): void {
         console.log('Game-Over Scene launched.');
 
-        this.startButton = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, 'START', { font: '28px Arial' });
+        const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
+        const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
+
+        this.startButton = this.add.text(screenCenterX, screenCenterY, 'START', { font: '28px Arial' }).setOrigin(0.5);
         this.startButton.setInteractive();
         this.startButton.once('pointerup', () => {
             this.scene.get('GameScene').scene.restart();
