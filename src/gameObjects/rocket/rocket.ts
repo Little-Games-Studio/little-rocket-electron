@@ -46,23 +46,27 @@ export class Rocket extends Phaser.Physics.Matter.Sprite {
         this.setVelocity(0, 0);
 
         if (this.keyW?.isDown || this.cursors.up.isDown) {
-            if (this.y > this.height / 2) {
+            if (this.y > this.height / 2) { // rocket cannot fly lower than the bottom of the screen
                 this.setVelocityY(-1);
             }  
         }
 
         if (this.keyA?.isDown || this.cursors.left.isDown) {
-            this.setVelocityX(-1);
+            if (this.x > this.width / 2) { // rocket cannot leave screen on the left
+                this.setVelocityX(-1);
+            }
         }
 
         if (this.keyS?.isDown || this.cursors.down.isDown) {
-            if (this.y < this.scene.cameras.main.height - this.height / 2) {
+            if (this.y < this.scene.cameras.main.height - this.height / 2) { // rocket cannot fly higher than the top of the screen
                 this.setVelocityY(1);
             }
         }
 
         if (this.keyD?.isDown || this.cursors.right.isDown) {
-            this.setVelocityX(1);
+            if (this.x < this.scene.cameras.main.width - this.width / 2) {  // rocket cannot leave screen on the right
+                this.setVelocityX(1);
+            }
         }
     }
 }
